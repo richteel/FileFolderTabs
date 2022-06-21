@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-color-mode="light">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="Description" content="Utility to create tabs for physical file folders" />
+		<script src="./js/include.js"></script>
+		<link rel="stylesheet" href="./style/filePlan.css" />
+		<script src="./js/filePlan.js"></script>
+		<!-- REF: https://stackoverflow.com/questions/8238407/how-to-parse-excel-xls-file-in-javascript-html5 -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
+
+		<script>
+			function layout() {
+				includeSection("_header_");
+				includeSection("_footer_");
+			}
+		</script>
+		<title>File Plan</title>
+	</head>
+	<body onload="layout();">
+		<span class="no-print">
+			<a class="skip-main" href="#main">Skip to main content</a>
+			<div id="_header_"></div>
+			
+			<h1 id="main">File Plan</h1>
+			<p>
+				This utility processes an Excel file to provide a printable page for file folder tabs. The Excel file must have the following format.
+				<ul>
+					<li>
+						Worksheet named "Tabs" with the following column names in the first row
+						<ul>
+							<li>
+								<strong>groupOrder</strong>: Integer value used to order the tab groups<br />
+								<i>Example: 3</i>
+							</li>
+							<li>
+								<strong>tabColor</strong>: HTML Color code or name used for the background color for the group name<br />
+								<i>Example: green</i>
+							</li>
+							<li>
+								<strong>textColor</strong>: HTML Color code or name used for the text color for the group name<br />
+								<i>Example: white</i>
+							</li>
+							<li>
+								<strong>tabGroup</strong>: The name for the tab group<br />
+								<i>Example: BANKING & INVESTMENTS</i>
+							</li>
+							<li>
+								<strong>tabSubGroup</strong>: The name for a subgroup<br />
+								<i>Example: BANK</i>
+							</li>
+							<li>
+								<strong>tabTitle</strong>: Title or name for the tab<br />
+								<i>Example: Capital One</i>
+							</li>
+							<li>
+								<strong>print</strong>: Boolean value of TRUE or FALSE to indicate that the tab should be printed. This allows for a subset of 
+								the tabs to be printed. This may be overridden by checking the "Print all tabs" checkbox.<br />
+								<i>Example: TRUE</i>
+							</li>
+						</ul>
+						The above example will result in a tab, which looks like the following. <br />
+						<div class="tabSample">
+							<div class="tabgroup" style="color:white; background-color:green">BANKING &amp; INVESTMENTS</div>
+							<div class="tabtext">BANK: Capital One</div>
+						</div>
+					</li>
+					<li>
+						<i>(Optional)</i> A Worksheet named "Size" with the following column names in the first row
+						<ul>
+							<li><strong>width</strong>: Width of the label in inches <i>DEFAULT: 3.0</i></li>
+							<li><strong>height</strong>: Height of the label in inches <i>DEFAULT: 0.5</i></li>
+						</ul>
+						The values may be adjusted in the page by entering different values in the "Width" and "Height" boxes and clicking the update button.
+					</li>
+				</ul>
+			</p>
+			<div id="controls">
+				<div>
+					<label for="cmdProcess">Pick an Excel Workbook to process: </label><input id="cmdProcess" type="button" value="Process" />
+				</div>
+				<div>
+					<input type="checkbox" id="printAll" name="printAll" checked="true" onclick="createFolderTabs();" />
+					<label for="printAll"> Print all tabs</label>
+				</div>
+				
+
+				<div class="labelSize">
+					<label for="tabWidth">&nbsp;Width:&nbsp;</label><input type="text" id="tabWidth" value="3" onkeypress="return isNumber(event)" onkeyup="return isNumber(event)" /> inches
+				</div>
+				<div>
+					<label for="tabHeight">Height:&nbsp;</label><input type="text" id="tabHeight" value="0.5" onkeypress="return isNumber(event)" onkeyup="return isNumber(event)" /> inches
+				</div>
+				<div>
+					<label for="cmdUpdate">Update height &amp; width: </label><input id="cmdUpdate" type="button" value="Update" onclick="createFolderTabs();" />
+				</div>
+			</div>
+		</span>
+		
+		<div class="outerOutput">
+			<div id="output"></div>
+		</div>
+		
+		<div class="no-print" style="padding-top: 1em;">
+			<div id="_footer_"></div>
+		</div>
+	</body>
+</html>
